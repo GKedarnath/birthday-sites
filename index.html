@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sri Danya Birthday Surprise</title>
+    <style>
+      :root {
+        --bg1: #43115b;
+        --bg2: #ff7ac6;
+        --bg3: #ffd166;
+        --text: #fffaf5;
+        --card: rgba(255, 255, 255, 0.12);
+        --card-border: rgba(255, 255, 255, 0.25);
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+        background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+        color: var(--text);
+        overflow: hidden;
+      }
+
+      body {
+        display: grid;
+        place-items: center;
+        position: relative;
+      }
+
+      .scene {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .scene::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at center, rgba(255,255,255,0.25), transparent 55%);
+      }
+
+      .card {
+        position: relative;
+        z-index: 2;
+        width: min(92vw, 540px);
+        padding: 48px 32px 36px;
+        border-radius: 30px;
+        text-align: center;
+        background: rgba(255,255,255,0.12);
+        border: 1px solid var(--card-border);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 24px 60px rgba(31, 13, 57, 0.35);
+      }
+
+      .badge {
+        display: inline-block;
+        margin-bottom: 14px;
+        padding: 8px 16px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.2);
+        letter-spacing: 0.18em;
+        font-size: 0.72rem;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(3rem, 11vw, 7rem);
+        letter-spacing: 0.2em;
+        font-weight: 900;
+        text-transform: uppercase;
+        text-shadow: 0 8px 30px rgba(255,255,255,0.2);
+      }
+
+      .subtitle {
+        margin: 18px auto 28px;
+        max-width: 32ch;
+        font-size: 1.03rem;
+        line-height: 1.6;
+        color: rgba(255,255,255,0.9);
+      }
+
+      .surprise-btn {
+        border: none;
+        border-radius: 999px;
+        padding: 18px 40px;
+        font-size: 1.05rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #3d1240;
+        background: linear-gradient(135deg, #fff0b3, #ffd166, #ff9f43);
+        box-shadow: 0 18px 32px rgba(255, 159, 67, 0.45);
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .surprise-btn:hover {
+        transform: translateY(-2px) scale(1.03);
+        box-shadow: 0 22px 38px rgba(255, 159, 67, 0.55);
+      }
+
+      .surprise-btn:active {
+        transform: translateY(1px) scale(0.99);
+      }
+
+      .surprise-btn:disabled {
+        opacity: 0.8;
+        cursor: default;
+      }
+
+      .message {
+        width: 100%;
+        margin-top: 26px;
+        min-height: 44px;
+        font-size: clamp(1.4rem, 5vw, 2.5rem);
+        font-weight: 900;
+        letter-spacing: 0.06em;
+        opacity: 0;
+        transform: translateY(12px) scale(0.9);
+        transition: all 0.5s ease;
+        text-shadow: 0 8px 24px rgba(255,255,255,0.25);
+      }
+
+      .message.show {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      .balloon {
+        position: absolute;
+        bottom: -180px;
+        width: 56px;
+        height: 72px;
+        border-radius: 50% 50% 48% 48%;
+        box-shadow: inset -10px -10px 20px rgba(0,0,0,0.08), inset 12px 12px 18px rgba(255,255,255,0.2);
+        animation: floatUp 10s linear forwards;
+        opacity: 0.9;
+      }
+
+      .balloon::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 100%;
+        width: 2px;
+        height: 76px;
+        background: rgba(255,255,255,0.7);
+        transform: translateX(-50%);
+      }
+
+      .balloon::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: -8px;
+        width: 18px;
+        height: 18px;
+        background: rgba(255,255,255,0.35);
+        border-radius: 50%;
+        transform: translateX(-50%);
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translate3d(0, 0, 0) rotate(0deg);
+        }
+        20% {
+          transform: translate3d(18px, -26vh, 0) rotate(10deg);
+        }
+        50% {
+          transform: translate3d(-30px, -58vh, 0) rotate(-8deg);
+        }
+        100% {
+          transform: translate3d(22px, -110vh, 0) rotate(12deg);
+        }
+      }
+
+      .firework {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        opacity: 0;
+        animation: burst 1.4s ease-out forwards;
+      }
+
+      .firework .spark {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        transform-origin: center;
+        animation: spark 0.9s ease-out forwards;
+      }
+
+      @keyframes burst {
+        0% {
+          opacity: 0;
+          transform: scale(0.3) translate(0, 0);
+        }
+        10% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: scale(1.9) translate(var(--dx), var(--dy));
+        }
+      }
+
+      @keyframes spark {
+        0% {
+          opacity: 1;
+          transform: scale(1) translate(0, 0);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0.2) translate(var(--tx), var(--ty));
+        }
+      }
+
+      @media (max-width: 560px) {
+        .card {
+          padding: 36px 22px 28px;
+        }
+
+        .badge {
+          letter-spacing: 0.12em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="scene" aria-hidden="true" id="scene"></div>
+
+    <main class="card">
+      <div class="badge">Birthday Bash</div>
+      <h1>Sri Danya</h1>
+      <p class="subtitle">A joyful little surprise for the most dazzling star in the room.</p>
+      <button class="surprise-btn" id="surpriseBtn" type="button">Surprise</button>
+      <div class="message" id="message">Happy Birthday, Sri Danya! 🎉</div>
+    </main>
+
+    <script>
+      const scene = document.getElementById("scene");
+      const surpriseBtn = document.getElementById("surpriseBtn");
+      const message = document.getElementById("message");
+
+      function createBalloons() {
+        for (let i = 0; i < 16; i++) {
+          const balloon = document.createElement("div");
+          const colors = ["#ff5db1", "#ffd166", "#59c3ff", "#7ef9c6", "#ff9f43", "#ff7979"];
+          balloon.className = "balloon";
+          balloon.style.left = `${Math.random() * 100}%`;
+          balloon.style.background = colors[Math.floor(Math.random() * colors.length)];
+          balloon.style.animationDelay = `${(Math.random() * 1.6).toFixed(2)}s`;
+          balloon.style.animationDuration = `${(9 + Math.random() * 5).toFixed(2)}s`;
+          scene.appendChild(balloon);
+        }
+      }
+
+      function createFireworks() {
+        for (let i = 0; i < 14; i++) {
+          const firework = document.createElement("div");
+          firework.className = "firework";
+          firework.style.left = `${18 + Math.random() * 64}%`;
+          firework.style.top = `${18 + Math.random() * 52}%`;
+          firework.style.background = ["#ff5db1", "#ffd166", "#59c3ff", "#7ef9c6"][Math.floor(Math.random() * 4)];
+          firework.style.setProperty("--dx", `${(Math.random() * 160 - 80).toFixed(0)}px`);
+          firework.style.setProperty("--dy", `${(Math.random() * 160 - 80).toFixed(0)}px`);
+
+          for (let j = 0; j < 8; j++) {
+            const spark = document.createElement("span");
+            spark.className = "spark";
+            spark.style.background = firework.style.background;
+            spark.style.left = "0px";
+            spark.style.top = "0px";
+            spark.style.setProperty("--tx", `${(Math.cos((Math.PI * 2 * j) / 8) * 50).toFixed(0)}px`);
+            spark.style.setProperty("--ty", `${(Math.sin((Math.PI * 2 * j) / 8) * 50).toFixed(0)}px`);
+            firework.appendChild(spark);
+          }
+
+          scene.appendChild(firework);
+        }
+      }
+
+      function playHappyBirthdayTone() {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+
+        const audioCtx = new AudioCtx();
+        const notes = [523.25, 659.25, 783.99, 659.25, 698.46, 659.25, 587.33, 523.25];
+
+        notes.forEach((note, index) => {
+          const oscillator = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          oscillator.type = "triangle";
+          oscillator.frequency.value = note;
+          gain.gain.value = 0.0001;
+
+          oscillator.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          const start = audioCtx.currentTime + index * 0.18;
+          const duration = 0.18;
+
+          gain.gain.setValueAtTime(0.0001, start);
+          gain.gain.exponentialRampToValueAtTime(0.18, start + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+
+          oscillator.start(start);
+          oscillator.stop(start + duration + 0.02);
+        });
+      }
+
+      surpriseBtn.addEventListener("click", () => {
+        surpriseBtn.disabled = true;
+        message.classList.add("show");
+        createBalloons();
+        createFireworks();
+        playHappyBirthdayTone();
+      });
+    </script>
+  </body>
+</html>
